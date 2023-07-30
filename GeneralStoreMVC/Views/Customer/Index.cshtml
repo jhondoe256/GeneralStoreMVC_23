@@ -1,0 +1,30 @@
+@model IEnumerable<CustomerIndexModel>
+
+<h1 class="text-center">All Customers</h1>
+<a asp-action="create" class="btn btn-success mb-2">Create A Customer</a>
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.Name</td>
+                <td>@customer.Email</td>
+                <td>
+                    <a asp-route-id="@customer.Id" asp-action="Details" class="btn btn-secondary">Details</a>
+                    <a asp-route-id="@customer.Id" asp-action="Edit" class="btn btn-warning">Edit</a>
+                    <a asp-route-id="@customer.Id" asp-action="Delete" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

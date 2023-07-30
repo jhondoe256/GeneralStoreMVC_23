@@ -1,0 +1,88 @@
+CREATE DATABASE GeneralStoreDb
+GO
+
+USE GeneralStoreDb
+GO
+
+CREATE TABLE [dbo].[Customers]
+(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(100) NOT NULL,
+    [Email] NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE [dbo].[Products]
+(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(100) NOT NULL,
+    [QuantityInStock] INT NOT NULL CHECK (QuantityInStock >= 0),
+    [Price] FLOAT NOT NULL
+);
+
+CREATE TABLE [dbo].[Transactions]
+(
+    [Id] INT PRIMARY KEY IDENTITY(1,1),
+    [ProductId] INT NOT NULL,
+    [CustomerId] INT NOT NULL,
+    [Quantity] INT NOT NULL CHECK (Quantity >= 0),
+    [DateOfTransaction] DATETIME NOT NULL,
+    CONSTRAINT fk_trans_product_id
+        FOREIGN KEY (ProductId)
+        REFERENCES dbo.Products(Id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_trans_customer_id
+        FOREIGN KEY (CustomerId)
+        REFERENCES dbo.Customers(Id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO [dbo].[Customers]
+    ([Name], [Email])
+VALUES
+    ('Joshua Tucker', 'jtucker@elevenfifty.org'),
+    ('Adam Jayne', 'ajayne@elevenfifty.org'),
+    ('Amanda Knight', 'aknight@elevenfifty.org'),
+    ('Terry Brown', 'tbrown@elevenfifty.org'),
+    ('Casey Wilson', 'cwilson@elevenfifty.org'),
+    ('Nick Perry', 'nperry@elevenfifty.org');
+
+INSERT INTO [dbo].[Products]
+    ([Name], [QuantityInStock], [Price])
+VALUES
+    ('Headphones', 3, 3.14),
+    ('Apple', 18, 4.99),
+    ('Candy Bar', 12, 6.32),
+    ('Bottle ''o Juice', 9, 8.30),
+    ('Band-Aids', 2, 9.99);
+
+INSERT INTO [dbo].[Transactions]
+    ([ProductId], [CustomerId], [Quantity], [DateOfTransaction])
+VALUES
+    (3, 6, 50, GETDATE()),
+    (4, 2, 32, GETDATE()),
+    (2, 4, 41, GETDATE()),
+    (1, 1, 16, GETDATE()),
+    (5, 3, 8, GETDATE()),
+    (4, 5, 12, GETDATE()),
+    (4, 4, 36, GETDATE()),
+    (3, 2, 21, GETDATE());
+
+SELECT
+    [Customers].[Name] AS Customer,
+    [Products].[Name] AS Product,
+    [Transactions].[Quantity]
+FROM [Customers]
+    INNER JOIN [Products]
+    INNER JOIN [Transactions]
+    ON [Products].[Id] = [Transactions].[ProductId]
+    ON [Customers].[Id] = [Transactions].[CustomerId]
+ORDER BY [Customers].[Name];
+
+
+<div asp-validation-summary="All"></div>
+
+<span asp-validation-for="@Model.Category.Name" class="text-danger"></span>
+
+@section Scripts{
+        <partial name="_ValidationScriptsPartial"/>
+ }

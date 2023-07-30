@@ -1,0 +1,27 @@
+@model CustomerCreateModel
+
+<h1>Create Customer</h1>
+<hr>
+
+<div class="container">
+    <form method="post" asp-action="Create">
+        <div class="from-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" placeholder="feedback@elevenfifty.org"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+         <div class="from-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Nick Perry"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div>
+             <button type="submit" class="btn btn-primary btn-block mt-2">Create</button>
+             <a asp-action="Index" class="btn btn-info mt-2">Back to Listing</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}
